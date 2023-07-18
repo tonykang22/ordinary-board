@@ -1,4 +1,4 @@
-package com.tonykang22.ordinaryboard.contorller;
+package com.tonykang22.ordinaryboard.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
