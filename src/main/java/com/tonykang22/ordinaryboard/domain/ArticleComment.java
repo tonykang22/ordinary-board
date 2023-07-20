@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Getter
-@ToString
+@ToString(callSuper = true)
 @Table(indexes = {
         @Index(columnList = "content"),
 })
@@ -18,18 +18,20 @@ public class ArticleComment extends AuditingFields {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter @ManyToOne(optional = false) private UserAccount userAccount;
     @Setter @ManyToOne(optional = false) private Article article;
     @Setter @Column(nullable = false, length = 500) private String content;
 
     protected ArticleComment() {}
 
-    public static ArticleComment of(Article article, String content) {
-        return new ArticleComment(article, content);
-    }
-
-    private ArticleComment(Article article, String content) {
+    private ArticleComment(UserAccount userAccount, Article article, String content) {
+        this.userAccount = userAccount;
         this.article = article;
         this.content = content;
+    }
+
+    public static ArticleComment of(UserAccount account, Article article, String content) {
+        return new ArticleComment(account, article, content);
     }
 
     @Override
