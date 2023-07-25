@@ -18,6 +18,7 @@ spring:
     password: 1q2w3e4r!
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
+    open-in-view: false
     defer-datasource-initialization: true
     hibernate.ddl-auto: create
     show-sql: true
