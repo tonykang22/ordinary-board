@@ -27,14 +27,13 @@ public class ArticleService {
         if (searchKeyword == null || searchKeyword.isBlank()) {
             return articleRepository.findAll(pageable).map(ArticleDto::from);
         }
-        switch (type) {
+        return switch (type) {
             case TITLE -> articleRepository.findByTitleContaining(searchKeyword, pageable).map(ArticleDto::from);
             case CONTENT -> articleRepository.findByContentContaining(searchKeyword, pageable).map(ArticleDto::from);
-            case ID -> articleRepository.findByUserAccount_IdContaining(searchKeyword, pageable).map(ArticleDto::from);
+            case ID -> articleRepository.findByUserAccount_UserIdContaining(searchKeyword, pageable).map(ArticleDto::from);
             case NICKNAME -> articleRepository.findByUserAccount_NicknameContaining(searchKeyword, pageable).map(ArticleDto::from);
             case HASHTAG -> articleRepository.findByHashtag("#" + searchKeyword, pageable).map(ArticleDto::from);
-        }
-        return Page.empty();
+        };
     }
 
     @Transactional(readOnly = true)
