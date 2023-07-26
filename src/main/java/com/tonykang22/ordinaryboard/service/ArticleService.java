@@ -1,10 +1,12 @@
 package com.tonykang22.ordinaryboard.service;
 
 import com.tonykang22.ordinaryboard.domain.Article;
-import com.tonykang22.ordinaryboard.domain.type.SearchType;
+import com.tonykang22.ordinaryboard.domain.UserAccount;
+import com.tonykang22.ordinaryboard.domain.constant.SearchType;
 import com.tonykang22.ordinaryboard.dto.ArticleDto;
 import com.tonykang22.ordinaryboard.dto.ArticleWithCommentsDto;
 import com.tonykang22.ordinaryboard.repository.ArticleRepository;
+import com.tonykang22.ordinaryboard.repository.UserAccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,7 @@ import java.util.List;
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
+    private final UserAccountRepository userAccountRepository;
 
     @Transactional(readOnly = true)
     public Page<ArticleDto> searchArticles(SearchType type, String searchKeyword, Pageable pageable) {
@@ -38,19 +41,27 @@ public class ArticleService {
     }
 
     @Transactional(readOnly = true)
-    public ArticleWithCommentsDto getArticle(Long articleId) {
+    public ArticleDto getArticle(Long articleId) {
+        return articleRepository.findById(articleId)
+                .map(ArticleDto::from)
+                .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다. articleId: " + articleId));
+    }
+
+    @Transactional(readOnly = true)
+    public ArticleWithCommentsDto getArticleWithComments(Long articleId) {
         return articleRepository.findById(articleId)
                 .map(ArticleWithCommentsDto::from)
                 .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다. articleId: " + articleId));
     }
 
     public void saveArticle(ArticleDto dto) {
-        articleRepository.save(dto.toEntity());
+        UserAccount userAccount = userAccountRepository.getReferenceById(dto.userAccountDto().userId());
+        articleRepository.save(dto.toEntity(userAccount));
     }
 
-    public void updateArticle(ArticleDto dto) {
+    public void updateArticle(Long articleId, ArticleDto dto) {
         try {
-            Article article = articleRepository.getReferenceById(dto.id());
+            Article article = articleRepository.getReferenceById(articleId);
             if (dto.title() != null) { article.setTitle(dto.title()); }
             if (dto.content() != null) { article.setContent(dto.content()); }
             article.setHashtag(dto.hashtag());

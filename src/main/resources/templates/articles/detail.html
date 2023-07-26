@@ -22,50 +22,60 @@
     </header>
 
     <div class="row g-5">
-        <section class="col-md-5 col-lg-4 order-md-last">
+        <section class="col-md-3 col-lg-4 order-md-last">
             <aside>
-                <p><span id="nickname">Uno</span></p>
-                <p><a id="email" href="mailto:sangwk92@gmail.com">tony@mail.com</a></p>
-                <p><time id="created-at" datetime="2023-01-01T00:00:00">2023-01-01</time></p>
+                <p><span id="nickname">Tony</span></p>
+                <p><a id="email" href="mailto:tony22@gmail.com">tony@mail.com</a></p>
+                <p><time id="created-at" datetime="2023-07-01T00:00:00">2023-07-01</time></p>
                 <p><span id="hashtag">#java</span></p>
             </aside>
         </section>
 
-        <article id="article-content" class="col-md-7 col-lg-8">
+        <article id="article-content" class="col-md-9 col-lg-8">
             <pre>본문</pre>
         </article>
+    </div>
+
+    <div class="row g-5" id="article-buttons">
+        <form id="delete-article-form">
+            <div class="pb-5 d-grid gap-2 d-md-block">
+                <a class="btn btn-success me-md-2" role="button" id="update-article">수정</a>
+                <button class="btn btn-danger me-md-2" type="submit">삭제</button>
+            </div>
+        </form>
     </div>
 
     <div class="row g-5">
         <section>
             <form class="row g-3">
-                <div class="col-8">
+                <div class="col-md-9 col-lg-8">
                     <label for="comment-textbox" hidden>댓글</label>
                     <textarea class="form-control" id="comment-textbox" placeholder="댓글 쓰기.." rows="3"></textarea>
                 </div>
-                <div class="col-auto">
+                <div class="col-md-3 col-lg-4">
                     <label for="comment-submit" hidden>댓글 쓰기</label>
                     <button class="btn btn-primary" id="comment-submit" type="submit">쓰기</button>
                 </div>
             </form>
 
-            <ul id="article-comments" class="row col-7">
+            <ul id="article-comments" class="row col-md-10 col-lg-8 pt-3">
                 <li>
-                    <div>
+                    <div class="row">
                         <strong>Tony</strong>
-                        <small><time>2023-01-01</time></small>
+                        <small><time>2023-07-02</time></small>
                         <p>
-                            Ssup ma man!
-                            Long time no see!
+                            테스트 댓글입니다.<br>
+                            테스트 중 입니다.
                         </p>
                     </div>
                 </li>
                 <li>
-                    <div>
+                    <div class="row">
                         <strong>Rony</strong>
-                        <small><time>2023-01-01</time></small>
+                        <small><time>2023-07-01</time></small>
                         <p>
-                            Wha~?
+                            테스트 댓글입니다.<br>
+                            테스트 중 입니다.
                         </p>
                     </div>
                 </li>
@@ -90,7 +100,6 @@
             </ul>
         </nav>
     </div>
-
 </main>
 
 <footer id="footer">

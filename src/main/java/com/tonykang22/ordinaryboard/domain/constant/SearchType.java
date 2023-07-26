@@ -1,4 +1,4 @@
-package com.tonykang22.ordinaryboard.domain.type;
+package com.tonykang22.ordinaryboard.domain.constant;
 
 import lombok.Getter;
 
