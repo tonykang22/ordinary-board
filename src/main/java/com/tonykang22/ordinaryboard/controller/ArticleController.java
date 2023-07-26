@@ -1,7 +1,10 @@
 package com.tonykang22.ordinaryboard.controller;
 
-import com.tonykang22.ordinaryboard.domain.type.SearchType;
+import com.tonykang22.ordinaryboard.domain.constant.FormStatus;
+import com.tonykang22.ordinaryboard.domain.constant.SearchType;
 import com.tonykang22.ordinaryboard.dto.ArticleDto;
+import com.tonykang22.ordinaryboard.dto.UserAccountDto;
+import com.tonykang22.ordinaryboard.dto.request.ArticleRequest;
 import com.tonykang22.ordinaryboard.dto.response.ArticleResponse;
 import com.tonykang22.ordinaryboard.dto.response.ArticleWithCommentsResponse;
 import com.tonykang22.ordinaryboard.service.ArticleService;
@@ -41,8 +44,8 @@ public class ArticleController {
     }
 
     @GetMapping("/{articleId}")
-    public String articles(@PathVariable Long articleId, ModelMap map) {
-        ArticleWithCommentsResponse article = ArticleWithCommentsResponse.from(articleService.getArticle(articleId));
+    public String article(@PathVariable Long articleId, ModelMap map) {
+        ArticleWithCommentsResponse article = ArticleWithCommentsResponse.from(articleService.getArticleWithComments(articleId));
         map.addAttribute("article", article);
         map.addAttribute("articleComments", article.articleCommentResponse());
         map.addAttribute("totalCount", articleService.getArticleCount());
@@ -54,7 +57,7 @@ public class ArticleController {
     }
 
     @GetMapping("/search-hashtag")
-    public String searchHashtag(
+    public String searchArticleHashtag(
             @RequestParam(required = false) String searchValue,
             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             ModelMap map
@@ -70,4 +73,50 @@ public class ArticleController {
 
         return "articles/search-hashtag";
     }
+
+    @GetMapping("/form")
+    public String articleForm(ModelMap map) {
+        map.addAttribute("formStatus", FormStatus.CREATE);
+
+        return "articles/form";
+    }
+
+    @PostMapping ("/form")
+    public String postNewArticle(ArticleRequest articleRequest) {
+        // TODO: 인증 정보를 넣어줘야 한다.
+        articleService.saveArticle(articleRequest.toDto(UserAccountDto.of(
+                "tony", "1234", "tony@mail.com", "Tony", "memo"
+        )));
+
+        return "redirect:/articles";
+    }
+
+    @GetMapping("/{articleId}/form")
+    public String updateArticleForm(@PathVariable Long articleId, ModelMap map) {
+        ArticleResponse article = ArticleResponse.from(articleService.getArticle(articleId));
+
+        map.addAttribute("article", article);
+        map.addAttribute("formStatus", FormStatus.UPDATE);
+
+        return "articles/form";
+    }
+
+    @PostMapping ("/{articleId}/form")
+    public String updateArticle(@PathVariable Long articleId, ArticleRequest articleRequest) {
+        // TODO: 인증 정보를 넣어줘야 한다.
+        articleService.updateArticle(articleId, articleRequest.toDto(UserAccountDto.of(
+                "tony", "1234", "tony@mail.com", "Tony", "memo"
+        )));
+
+        return "redirect:/articles/" + articleId;
+    }
+
+    @PostMapping ("/{articleId}/delete")
+    public String deleteArticle(@PathVariable Long articleId) {
+        // TODO: 인증 정보를 넣어줘야 한다.
+        articleService.deleteArticle(articleId);
+
+        return "redirect:/articles";
+    }
+
 }
