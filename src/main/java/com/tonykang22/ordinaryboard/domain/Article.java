@@ -30,7 +30,7 @@ public class Article extends AuditingFields {
 
     @Setter private String hashtag;
 
-    @OrderBy("createdAt DESC")
+    @OrderBy("createdAt ASC")
     @ToString.Exclude
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
