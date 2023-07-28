@@ -1,5 +1,5 @@
-insert into user_account (user_id, user_password, nickname, email, memo, created_at, created_by, modified_at, modified_by) values ('tony', 'asdf', 'TonyK', 'tony@mail.com', 'Ssup', now(), 'tony', now(), 'tony'),
-                                                                                                                                  ('tony2', 'asdf2', 'Rony', 'tony2@mail.com', 'Ssup', now(), 'tony2', now(), 'tony2');
+insert into user_account (user_id, user_password, nickname, email, memo, created_at, created_by, modified_at, modified_by) values ('tony', '{bcrypt}$2a$10$ZQbN0sEAEBHP3Y3RAa2J9e1Tw7RUTKtyXLAeMGbRtVx/uy.tpNur.', 'TonyK', 'tony@mail.com', 'Ssup', now(), 'tony', now(), 'tony'),
+                                                                                                                                  ('tony2', '{bcrypt}$2a$10$wWMFiHXm4vQzCFKB7XmWauDudmc7T7sKqzN7QY5QQXizZLJKLHttO', 'Rony', 'tony2@mail.com', 'Ssup', now(), 'tony2', now(), 'tony2');
 -- TODO: 비밀번호 노출되지 않도록 encypt 필요
 
 insert into article (user_id, title, content, hashtag, created_at, created_by, modified_at, modified_by) values ('tony2', 'Aenean sit amet justo.', 'Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis. Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.', 'Indigo', '2022-10-13 01:21:09', 'Jerrylee', '2023-01-11 12:13:25', 'Hyman'),

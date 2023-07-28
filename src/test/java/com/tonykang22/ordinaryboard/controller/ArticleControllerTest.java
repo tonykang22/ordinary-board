@@ -1,6 +1,6 @@
 package com.tonykang22.ordinaryboard.controller;
 
-import com.tonykang22.ordinaryboard.config.SecurityConfig;
+import com.tonykang22.ordinaryboard.config.TestSecurityConfig;
 import com.tonykang22.ordinaryboard.domain.constant.FormStatus;
 import com.tonykang22.ordinaryboard.domain.constant.SearchType;
 import com.tonykang22.ordinaryboard.dto.ArticleDto;
@@ -11,7 +11,6 @@ import com.tonykang22.ordinaryboard.dto.response.ArticleResponse;
 import com.tonykang22.ordinaryboard.service.ArticleService;
 import com.tonykang22.ordinaryboard.service.PaginationService;
 import com.tonykang22.ordinaryboard.util.FormDataEncoder;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +22,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.TestExecutionEvent;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -37,7 +39,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("View 컨트롤러 - 게시글")
-@Import({SecurityConfig.class, FormDataEncoder.class})
+@Import({TestSecurityConfig.class, FormDataEncoder.class})
 @WebMvcTest(ArticleController.class)
 class ArticleControllerTest {
 
@@ -130,7 +132,8 @@ class ArticleControllerTest {
         then(paginationService).should().getPaginationBarNumbers(pageable.getPageNumber(), Page.empty().getTotalPages());
     }
 
-    @DisplayName("[view]: GET - 게시글 페이지: 정상 호출")
+    @WithMockUser
+    @DisplayName("[view]: GET - 게시글 페이지: 정상 호출 [인증된 사용자]")
     @Test
     void givenNothing_whenRequestingArticleView_thenReturnsArticleView() throws Exception {
         // given
@@ -140,7 +143,7 @@ class ArticleControllerTest {
         given(articleService.getArticleCount()).willReturn(totalCount);
 
         // when & then
-        mvc.perform(get("/articles/1"))
+        mvc.perform(get("/articles/" + articleId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("articles/detail"))
@@ -151,18 +154,17 @@ class ArticleControllerTest {
         then(articleService).should().getArticleCount();
     }
 
-    @Disabled("구현 중")
-    @DisplayName("[view]: GET - 게시글 검색 전용 페이지: 정상 호출")
+    @DisplayName("[view]: GET - 게시글 페이지: 인증되지 않았을 시, 로그인 페이지 이동")
     @Test
-    void givenNothing_whenRequestingArticlesSearchView_thenReturnsArticlesSearchView() throws Exception {
+    void givenNothing_whenRequestingArticleView_thenRedirectToLoginPage() throws Exception {
         // given
+        long articleId = 1L;
 
         // when & then
-        mvc.perform(get("/articles/search"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
-                .andExpect(view().name("articles/search"))
-                .andExpect(model().attributeExists("articles"));
+        mvc.perform(get("/articles/" + articleId))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrlPattern("**/login"));
+        then(articleService).shouldHaveNoInteractions();
     }
 
     @DisplayName("[view]: GET - 게시글 해시태그 검색 페이지: 정상 호출")
@@ -214,7 +216,8 @@ class ArticleControllerTest {
         then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
     }
 
-    @DisplayName("[view][GET] 새 게시글 작성 페이지")
+    @WithMockUser
+    @DisplayName("[view]: GET - 새 게시글 작성 페이지")
     @Test
     void givenNothing_whenRequesting_thenReturnsNewArticlePage() throws Exception {
         // Given
@@ -227,7 +230,8 @@ class ArticleControllerTest {
                 .andExpect(model().attribute("formStatus", FormStatus.CREATE));
     }
 
-    @DisplayName("[view][POST] 새 게시글 등록 - 정상 호출")
+    @WithUserDetails(value = "tonyTest", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("[view]: POST - 새 게시글 등록: 정상 호출")
     @Test
     void givenNewArticleInfo_whenRequesting_thenSavesNewArticle() throws Exception {
         // Given
@@ -247,7 +251,8 @@ class ArticleControllerTest {
         then(articleService).should().saveArticle(any(ArticleDto.class));
     }
 
-    @DisplayName("[view][GET] 게시글 수정 페이지")
+    @WithMockUser
+    @DisplayName("[view]: GET - 게시글 수정 페이지")
     @Test
     void givenNothing_whenRequesting_thenReturnsUpdatedArticlePage() throws Exception {
         // Given
@@ -265,7 +270,8 @@ class ArticleControllerTest {
         then(articleService).should().getArticle(articleId);
     }
 
-    @DisplayName("[view][POST] 게시글 수정 - 정상 호출")
+    @WithUserDetails(value = "tonyTest", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("[view]: POST - 게시글 수정: 정상 호출")
     @Test
     void givenUpdatedArticleInfo_whenRequesting_thenUpdatesNewArticle() throws Exception {
         // Given
@@ -286,12 +292,14 @@ class ArticleControllerTest {
         then(articleService).should().updateArticle(eq(articleId), any(ArticleDto.class));
     }
 
-    @DisplayName("[view][POST] 게시글 삭제 - 정상 호출")
+    @WithUserDetails(value = "tonyTest", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("[view]: POST - 게시글 삭제: 정상 호출")
     @Test
     void givenArticleIdToDelete_whenRequesting_thenDeletesArticle() throws Exception {
         // Given
         long articleId = 1L;
-        willDoNothing().given(articleService).deleteArticle(articleId);
+        String userId = "tonyTest";
+        willDoNothing().given(articleService).deleteArticle(articleId, userId);
 
         // When & Then
         mvc.perform(
@@ -302,7 +310,7 @@ class ArticleControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/articles"))
                 .andExpect(redirectedUrl("/articles"));
-        then(articleService).should().deleteArticle(articleId);
+        then(articleService).should().deleteArticle(articleId, userId);
     }
 
 
