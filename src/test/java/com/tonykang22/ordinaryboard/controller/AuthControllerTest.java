@@ -1,14 +1,10 @@
 package com.tonykang22.ordinaryboard.controller;
 
-import com.tonykang22.ordinaryboard.config.SecurityConfig;
-import com.tonykang22.ordinaryboard.service.ArticleService;
-import com.tonykang22.ordinaryboard.service.PaginationService;
+import com.tonykang22.ordinaryboard.config.TestSecurityConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,17 +14,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("View 컨트롤러 - 인증")
-@Import(SecurityConfig.class)
-@WebMvcTest
+@Import(TestSecurityConfig.class)
+@WebMvcTest(Void.class)
 class AuthControllerTest {
 
     private final MockMvc mvc;
-
-    @MockBean
-    ArticleService articleService;
-    @MockBean
-    PaginationService paginationService;
-
 
     public AuthControllerTest(@Autowired MockMvc mvc) {
         this.mvc = mvc;
