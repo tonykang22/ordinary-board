@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>게시글 페이지</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link href="/css/articles/article-content.css" rel="stylesheet">
 </head>
 
@@ -26,7 +27,9 @@
             <aside>
                 <p><span id="nickname">Tony</span></p>
                 <p><a id="email" href="mailto:tony22@gmail.com">tony@mail.com</a></p>
-                <p><time id="created-at" datetime="2023-07-01T00:00:00">2023-07-01</time></p>
+                <p>
+                    <time id="created-at" datetime="2023-07-01T00:00:00">2023-07-01</time>
+                </p>
                 <p><span id="hashtag">#java</span></p>
             </aside>
         </section>
@@ -51,7 +54,8 @@
                 <input type="hidden" class="article-id">
                 <div class="col-md-9 col-lg-8">
                     <label for="comment-textbox" hidden>댓글</label>
-                    <textarea class="form-control" id="comment-textbox" placeholder="댓글 쓰기.." rows="3" required></textarea>
+                    <textarea class="form-control" id="comment-textbox" placeholder="댓글 쓰기.." rows="3"
+                              required></textarea>
                 </div>
                 <div class="col-md-3 col-lg-4">
                     <label for="comment-submit" hidden>댓글 쓰기</label>
@@ -66,26 +70,37 @@
                         <div class="row">
                             <div class="col-md-10 col-lg-9">
                                 <strong>Tony</strong>
-                                <small><time>2023-07-01</time></small>
+                                <small>
+                                    <time>2023-07-01</time>
+                                </small>
                                 <p>
                                     테스트 중 입니다.<br>
                                     테스트 댓글 입니다.
                                 </p>
                             </div>
-                            <div class="col-2 mb-3">
-                                <button type="submit" class="btn btn-outline-danger" id="delete-comment-button">삭제</button>
+                            <div class="col-2 mb-3 align-self-center">
+                                <button type="submit" class="btn btn-outline-danger" id="delete-comment-button">삭제
+                                </button>
                             </div>
                         </div>
                     </form>
                 </li>
                 <li>
-                    <div>
-                        <strong>Rony</strong>
-                        <small><time>2023-07-01</time></small>
-                        <p>
-                            테스트 댓글입니다.<br>
-                            테스트 중 입니다.
-                        </p>
+                    <div class="row">
+                        <div class="col-md-10 col-lg-9">
+                            <strong>Rony</strong>
+                            <small>
+                                <time>2023-07-01</time>
+                            </small>
+                            <p>
+                                테스트 댓글입니다.<br>
+                                테스트 중 입니다.
+                            </p>
+                        </div>
+                        <div class="col-2 mb-3 align-self-center">
+                            <button type="submit" class="btn btn-outline-danger" hidden>삭제
+                            </button>
+                        </div>
                     </div>
                 </li>
             </ul>
@@ -116,6 +131,8 @@
     푸터 위치
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
 </body>
 </html>
